@@ -22,7 +22,10 @@ class SupervisorController extends Controller
         }
 
         $supervisor = $user->supervisor;
-        return response()->json(['data' => $supervisor->interns], 200);
+        
+        $interns = $supervisor->interns()->with('user')->get(); 
+
+        return response()->json(['data' => $interns], 200);
     }
 
     public function getReportSummary(Request $request, Intern $intern)
