@@ -24,6 +24,8 @@ class StoreLearningModuleRequest extends FormRequest
         return [
             'title' => 'required|string|max:200',
             'description' => 'nullable|string',
+            'intern_ids' => 'required|array',
+            'intern_ids.*' => 'exists:interns,id',
         ];
     }
 }

@@ -86,6 +86,7 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::get('modules/{module}/learning-progress', [SupervisorLearningProgress::class, 'getModuleProgress']);
 
         // Rute untuk melihat activity reports intern
+        Route::get('/supervisor/activity-reports', [SupervisorActivityReportController::class, 'index']);
         Route::get('/supervisor/interns/{intern}/report-summary', [SupervisorController::class, 'getReportSummary']);
     });
 

@@ -23,22 +23,28 @@ class LearningModuleController extends Controller
 
     public function store(StoreLearningModuleRequest $request)
     {
-        $supervisor = Auth::user()->supervisor;
+        $user = Auth::user();
+        $supervisor = $user->supervisor;
 
-        $validator = $request->validated();
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors(), 400);
+        if (!$supervisor) {
+            return response()->json(['message' => 'Unauthorized'], 403);
         }
 
-        $module = $supervisor->learningModules()->create([
+        $learningModule = $supervisor->learningModules()->create([
             'title' => $request->title,
             'description' => $request->description,
         ]);
 
+        $internIds = $request->input('intern_ids');
+
+        if (!empty($internIds)) {
+            // 'attach' adalah method untuk relasi Many-to-Many
+            $learningModule->interns()->attach($internIds);
+        }
+        
         return response()->json([
-            'message' => 'Learning module created successfully.',
-            'data' => $module
+            'message' => 'Learning module created and assigned successfully.',
+            'data' => $learningModule,
         ], 201);
     }
 
